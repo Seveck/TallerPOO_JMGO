@@ -20,6 +20,17 @@ public class CuentaBancaria {
     */
 
     public CuentaBancaria() {
+        this.numeroCuenta = "000000";
+        this.titular = "Sin Nombre";
+        this.saldo = 0.0;
+        this.limiteCredito = 0.0;
+    }
+
+    public CuentaBancaria(String numeroCuenta, String titular) {
+        this.numeroCuenta = numeroCuenta;
+        this.titular = titular;
+        this.saldo = 0.0;
+        this.limiteCredito = 100.0;
     }
 
     public CuentaBancaria(String numeroCuenta, String titular, double saldo, Double limiteCredito) {
@@ -59,6 +70,30 @@ public class CuentaBancaria {
 
     public void setLimiteCredito(Double limiteCredito) {
         this.limiteCredito = limiteCredito;
+    }
+
+    public boolean depositar(double monto) {
+        if (monto > 0) {
+            this.saldo = this.saldo + monto;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean retirar(double monto) {
+        double limite = 0.0;
+        if (this.limiteCredito != null) {
+            limite = this.limiteCredito;
+        }
+        double totalDisponible = this.saldo + limite;
+
+        if (monto > 0 && monto <= totalDisponible) {
+            this.saldo = this.saldo - monto;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

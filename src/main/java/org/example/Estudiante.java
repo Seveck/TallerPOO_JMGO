@@ -54,6 +54,12 @@ public class Estudiante {
         this.estaMatriculado = estaMatriculado;
     }
 
+    public String obtenerReporteAcademicos() {
+        StringBuilder reporte = new StringBuilder();
+        reporte.append(String.format("Estudiante: %s | Promedio: %.2f | Matriculado: %b", nombreCompleto, promedioCalificaciones, estaMatriculado));
+        return reporte.toString();
+    }
+
     @Override
     public String toString() {
         return "Estudiante{" +

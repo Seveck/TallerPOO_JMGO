@@ -1,5 +1,10 @@
 package org.example;
 
+/*
+ * Justificación de tipos:
+ * Se usan tipos primitivos (double, int, boolean) porque consumen menos memoria
+ * y no necesitan valores nulos (null). Los Wrappers consumen mas memoria porque son objetos.
+ */
 public class Vehiculo {
 
     private String MarcaVehiculo;
@@ -9,14 +14,19 @@ public class Vehiculo {
     private boolean EstadoMotor;
 
     public Vehiculo() {
+        this.MarcaVehiculo = "Genérico";
+        this.ModeloVehiculo = "Sin Modelo";
+        this.KilometrajeActual = 0.0;
+        this.VelocidadMaxima = 120;
+        this.EstadoMotor = false;
     }
 
     public Vehiculo(String marcaVehiculo, String modeloVehiculo, double kilometrajeActual, int velocidadMaxima, boolean estadoMotor) {
-        MarcaVehiculo = marcaVehiculo;
-        ModeloVehiculo = modeloVehiculo;
-        KilometrajeActual = kilometrajeActual;
-        VelocidadMaxima = velocidadMaxima;
-        EstadoMotor = estadoMotor;
+        this.MarcaVehiculo = marcaVehiculo;
+        this.ModeloVehiculo = modeloVehiculo;
+        this.KilometrajeActual = kilometrajeActual;
+        this.VelocidadMaxima = velocidadMaxima;
+        this.EstadoMotor = estadoMotor;
     }
 
     public String getMarcaVehiculo() {

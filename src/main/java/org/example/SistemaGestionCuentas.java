@@ -43,8 +43,10 @@ public class SistemaGestionCuentas {
                         if (cuentaEncontrada == null) {
                             System.out.printf("Error: No se encontro la cuenta numero %s.%n", numDeposito);
                         } else {
-                            cuentaEncontrada.setSaldo(cuentaEncontrada.getSaldo() + montoDeposito);
-                            System.out.printf("Deposito exitoso. Nuevo saldo: $%.2f%n", cuentaEncontrada.getSaldo());
+                            boolean exito = cuentaEncontrada.depositar(montoDeposito);
+                            if (exito) {
+                                System.out.printf("Deposito exitoso. Nuevo saldo: $%.2f%n", cuentaEncontrada.getSaldo());
+                            }
                         }
                     }
                     break;
@@ -68,14 +70,8 @@ public class SistemaGestionCuentas {
                         if (cuentaEncontrada == null) {
                             System.out.printf("Error: No se encontro la cuenta numero %s.%n", numRetiro);
                         } else {
-                            double limite = 0.0;
-                            if (cuentaEncontrada.getLimiteCredito() != null) {
-                                limite = cuentaEncontrada.getLimiteCredito();
-                            }
-                            double totalDisponible = cuentaEncontrada.getSaldo() + limite;
-
-                            if (montoRetiro <= totalDisponible) {
-                                cuentaEncontrada.setSaldo(cuentaEncontrada.getSaldo() - montoRetiro);
+                            boolean exito = cuentaEncontrada.retirar(montoRetiro);
+                            if (exito) {
                                 System.out.printf("Retiro exitoso. Nuevo saldo: $%.2f%n", cuentaEncontrada.getSaldo());
                             } else {
                                 System.out.printf("Error: Fondos insuficientes para retirar $%.2f.%n", montoRetiro);
