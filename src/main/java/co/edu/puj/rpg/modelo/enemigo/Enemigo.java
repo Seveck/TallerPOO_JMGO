@@ -2,84 +2,34 @@ package co.edu.puj.rpg.modelo.enemigo;
 
 import co.edu.puj.rpg.modelo.Personaje;
 
-public class Enemigo {
-
-    private String nombre;
-    private int puntosVida;
-    private int vidaMaxima;
-    private int puntosAtaque;
-    private boolean estaVivo;
+public class Enemigo extends Personaje {
 
     public Enemigo() {
-        this.estaVivo = true;
+        super();
+    }
+
+    public Enemigo(String nombre, int vida, int ataqueBase, int posicionX, int posicionY) {
+        super(nombre, vida, ataqueBase, posicionX, posicionY);
     }
 
     public Enemigo(String nombre, int vidaMaxima, int puntosAtaque) {
-        this.nombre = nombre;
-        this.vidaMaxima = vidaMaxima;
-        this.puntosAtaque = puntosAtaque;
-        this.puntosVida = vidaMaxima;
-        this.estaVivo = true;
+        super(nombre, vidaMaxima, puntosAtaque, 0, 0);
     }
 
     public void atacar(Personaje personaje) {
-        personaje.recibirDano(this.puntosAtaque);
+        personaje.defender(this.ataqueBase);
     }
 
-    public void recibirDano(int cantidadDano) {
-        setPuntosVida(this.puntosVida - cantidadDano);
+    @Override
+    public void realizarAtaqueEspecial(Personaje objetivo) {
+        int danoTotal = this.ataqueBase + 5;
+        System.out.println(this.nombre + " realiza un Mordisco Feroz contra " + objetivo.getNombre() + " causando " + danoTotal + " de dano!");
+        objetivo.defender(danoTotal);
     }
 
-    public void setPuntosVida(int vida) {
-        if (vida <= 0) {
-            this.puntosVida = 0;
-            this.estaVivo = false;
-        } else if (vida > this.vidaMaxima) {
-            this.puntosVida = this.vidaMaxima;
-            this.estaVivo = true;
-        } else {
-            this.puntosVida = vida;
-            this.estaVivo = true;
-        }
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getPuntosVida() {
-        return puntosVida;
-    }
-
-    public int getVidaMaxima() {
-        return vidaMaxima;
-    }
-
-    public void setVidaMaxima(int vidaMaxima) {
-        if (vidaMaxima > 0) {
-            this.vidaMaxima = vidaMaxima;
-        }
-    }
-
-    public int getPuntosAtaque() {
-        return puntosAtaque;
-    }
-
-    public void setPuntosAtaque(int puntosAtaque) {
-        if (puntosAtaque > 0) {
-            this.puntosAtaque = puntosAtaque;
-        }
-    }
-
-    public boolean isEstaVivo() {
-        return estaVivo;
-    }
-
-    public void setEstaVivo(boolean estaVivo) {
-        this.estaVivo = estaVivo;
+    @Override
+    public void defender(int danoRecibido) {
+        System.out.println(this.nombre + " recibe " + danoRecibido + " de dano.");
+        recibirDano(danoRecibido);
     }
 }

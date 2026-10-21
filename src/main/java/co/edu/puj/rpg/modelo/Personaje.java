@@ -1,92 +1,120 @@
 package co.edu.puj.rpg.modelo;
 
-import co.edu.puj.rpg.modelo.enemigo.Enemigo;
+public abstract class Personaje implements ICombatiente {
 
-public class Personaje {
-
-    private String nombre;
-    private int puntosVida;
-    private int vidaMaxima;
-    private int puntosAtaque;
-    private int nivel;
-    private double oro;
-    private boolean estaVivo;
+    protected String nombre;
+    protected int vida;
+    protected int vidaMaxima;
+    protected int ataqueBase;
+    protected int posicionX;
+    protected int posicionY;
+    protected int nivel;
+    protected double oro;
+    protected boolean estaVivo;
 
     public Personaje() {
         this.nivel = 1;
+        this.oro = 0.0;
+        this.estaVivo = true;
+    }
+
+    public Personaje(String nombre, int vida, int ataqueBase, int posicionX, int posicionY) {
+        this.nombre = nombre;
+        this.vida = vida;
+        this.vidaMaxima = vida;
+        this.ataqueBase = ataqueBase;
+        this.posicionX = posicionX;
+        this.posicionY = posicionY;
+        this.nivel = 1;
+        this.oro = 0.0;
         this.estaVivo = true;
     }
 
     public Personaje(String nombre, int vidaMaxima, int puntosAtaque, double oro) {
         this.nombre = nombre;
+        this.vida = vidaMaxima;
         this.vidaMaxima = vidaMaxima;
-        this.puntosAtaque = puntosAtaque;
+        this.ataqueBase = puntosAtaque;
         this.oro = oro;
-        this.puntosVida = vidaMaxima;
+        this.posicionX = 0;
+        this.posicionY = 0;
         this.nivel = 1;
         this.estaVivo = true;
     }
 
-    public void atacar(Enemigo enemigo) {
-        int dano = this.puntosAtaque;
-        if (Math.random() < 0.15) {
-            dano = dano * 2;
-            System.out.println("¡Golpe critico!");
+    public abstract void realizarAtaqueEspecial(Personaje objetivo);
+
+    public boolean estaVivo() {
+        if (this.vida > 0) {
+            return true;
+        } else {
+            return false;
         }
-        enemigo.recibirDano(dano);
     }
 
-    public void usarPocion(int cantidadRestaurada) {
-        setPuntosVida(this.puntosVida + cantidadRestaurada);
+    public boolean isEstaVivo() {
+        return estaVivo();
     }
 
     public void recibirDano(int cantidadDano) {
-        setPuntosVida(this.puntosVida - cantidadDano);
-    }
-
-    public void setPuntosVida(int vida) {
-        if (vida <= 0) {
-            this.puntosVida = 0;
+        this.vida = this.vida - cantidadDano;
+        if (this.vida <= 0) {
+            this.vida = 0;
             this.estaVivo = false;
-        } else if (vida > this.vidaMaxima) {
-            this.puntosVida = this.vidaMaxima;
-            this.estaVivo = true;
-        } else {
-            this.puntosVida = vida;
+        }
+    }
+
+    public void usarPocion(int cantidadRestaurada) {
+        this.vida = this.vida + cantidadRestaurada;
+        if (this.vida > this.vidaMaxima) {
+            this.vida = this.vidaMaxima;
+        }
+        if (this.vida > 0) {
             this.estaVivo = true;
         }
     }
 
-    public void setOro(double oro) {
-        if (oro < 0.0) {
-            System.out.println("Transaccion rechazada: saldo insuficiente.");
-        } else {
-            this.oro = oro;
-        }
+    public void curar(int cantidad) {
+        usarPocion(cantidad);
     }
 
-    public void setNivel(int nivel) {
-        if (nivel < 1) {
-            System.out.println("Valor invalido!");
-        } else {
-            this.nivel = nivel;
-        }
+    @Override
+    public void defender(int danoRecibido) {
+        recibirDano(danoRecibido);
     }
 
     public String getNombre() {
-        return nombre;
+        return this.nombre;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    public int getVida() {
+        return this.vida;
+    }
+
+    public void setVida(int vida) {
+        this.vida = vida;
+        if (this.vida <= 0) {
+            this.vida = 0;
+            this.estaVivo = false;
+        } else {
+            this.estaVivo = true;
+        }
+    }
+
     public int getPuntosVida() {
-        return puntosVida;
+        return this.vida;
+    }
+
+    public void setPuntosVida(int vida) {
+        setVida(vida);
     }
 
     public int getVidaMaxima() {
-        return vidaMaxima;
+        return this.vidaMaxima;
     }
 
     public void setVidaMaxima(int vidaMaxima) {
@@ -95,26 +123,62 @@ public class Personaje {
         }
     }
 
-    public int getPuntosAtaque() {
-        return puntosAtaque;
+    public int getAtaqueBase() {
+        return this.ataqueBase;
     }
 
-    public void setPuntosAtaque(int puntosAtaque) {
-        if (puntosAtaque > 0) {
-            this.puntosAtaque = puntosAtaque;
+    public void setAtaqueBase(int ataqueBase) {
+        if (ataqueBase > 0) {
+            this.ataqueBase = ataqueBase;
         }
     }
 
+    public int getPuntosAtaque() {
+        return this.ataqueBase;
+    }
+
+    public void setPuntosAtaque(int puntosAtaque) {
+        setAtaqueBase(puntosAtaque);
+    }
+
+    public int getPosicionX() {
+        return this.posicionX;
+    }
+
+    public void setPosicionX(int posicionX) {
+        this.posicionX = posicionX;
+    }
+
+    public int getPosicionY() {
+        return this.posicionY;
+    }
+
+    public void setPosicionY(int posicionY) {
+        this.posicionY = posicionY;
+    }
+
     public int getNivel() {
-        return nivel;
+        return this.nivel;
+    }
+
+    public void setNivel(int nivel) {
+        if (nivel >= 1) {
+            this.nivel = nivel;
+        } else {
+            System.out.println("Valor invalido!");
+        }
     }
 
     public double getOro() {
-        return oro;
+        return this.oro;
     }
 
-    public boolean isEstaVivo() {
-        return estaVivo;
+    public void setOro(double oro) {
+        if (oro < 0.0) {
+            System.out.println("Transaccion rechazada: saldo insuficiente.");
+        } else {
+            this.oro = oro;
+        }
     }
 
     public void setEstaVivo(boolean estaVivo) {
